@@ -41,7 +41,20 @@ func LoadConfig(configPath string) (*DBConfig, error) {
 
 // Connect establishes a connection to the database
 func Connect(config *DBConfig) (*sql.DB, error) {
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s",
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?tls=false",
 		config.User, config.Password, config.Host, config.Port, config.DBName)
-	return sql.Open("mysql", dsn)
+	fmt.Printf("Attempting to connect to database: %s\n", dsn)
+	db, err := sql.Open("mysql", dsn)
+	if err != nil {
+		fmt.Printf("Error creating database connection: %v\n", err)
+		return nil, err
+	}
+
+	if err := db.Ping(); err != nil {
+		fmt.Printf("Database ping failed: %v\n", err)
+		return nil, err
+	}
+
+	fmt.Println("Successfully connected to the database!")
+	return db, nil
 }

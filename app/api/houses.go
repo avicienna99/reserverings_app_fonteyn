@@ -14,7 +14,7 @@ import (
 func GetHousesHandler(dbConn *sql.DB, tableName string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		// Query the database
-		query := fmt.Sprintf("SELECT id, name, description, price FROM %s", tableName)
+		query := fmt.Sprintf("SELECT id, name, description, price, availability FROM %s", tableName)
 		rows, err := dbConn.Query(query)
 		if err != nil {
 			log.Printf("Query failed: %v", err)
@@ -27,7 +27,7 @@ func GetHousesHandler(dbConn *sql.DB, tableName string) http.HandlerFunc {
 		var houses []db.House
 		for rows.Next() {
 			var house db.House
-			if err := rows.Scan(&house.ID, &house.Name, &house.Description, &house.Price); err != nil {
+			if err := rows.Scan(&house.ID, &house.Name, &house.Description, &house.Price, &house.Availability); err != nil {
 				log.Printf("Row scan failed: %v", err)
 				http.Error(w, "Internal server error", http.StatusInternalServerError)
 				return
