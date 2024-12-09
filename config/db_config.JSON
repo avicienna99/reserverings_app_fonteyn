@@ -1,5 +1,5 @@
 {
-    "host": "testdb01.mysql.database.azure.com",
+    "host": "db01resapptest.mysql.database.azure.com",
     "port": 3306,
     "user": "nkouba",
     "password": "Laithislockedin!",

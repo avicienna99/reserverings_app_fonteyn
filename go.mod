@@ -1,4 +1,4 @@
-module github.com/avicienna99/reserverings_app_fonteyn.git
+module reserverings_app_fonteyn
 
 go 1.23.0
 

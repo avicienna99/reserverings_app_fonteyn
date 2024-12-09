@@ -1,17 +1,16 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 
-	"github.com/avicienna99/reserverings_app_fonteyn.git/app/api"
-	"github.com/avicienna99/reserverings_app_fonteyn.git/app/db"
+	"reserverings_app_fonteyn/app/api"
+	"reserverings_app_fonteyn/app/db"
 )
 
 func main() {
 
-	config, err := db.LoadConfig("../config/db_config.json")
+	config, err := db.LoadConfig("./config/db_config.json")
 	if err != nil {
 		log.Fatalf("Failed to load configuration: %v", err)
 	}
@@ -22,9 +21,9 @@ func main() {
 	}
 	defer dbConn.Close()
 
-	http.Handle("/", http.FileServer(http.Dir("./static")))
+	http.Handle("/", http.FileServer(http.Dir("./app/static")))
+
 	http.HandleFunc("/api/houses", api.GetHousesHandler(dbConn, config.Table))
 
-	fmt.Println("Server started at http://localhost:8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe(":80", nil))
 }

@@ -10,7 +10,6 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-// DBConfig stores database connection settings
 type DBConfig struct {
 	Host     string `json:"host"`
 	Port     int    `json:"port"`
@@ -20,7 +19,6 @@ type DBConfig struct {
 	Table    string `json:"table"`
 }
 
-// LoadConfig reads the database configuration from a JSON file
 func LoadConfig(configPath string) (*DBConfig, error) {
 	filePath, err := filepath.Abs(configPath)
 	if err != nil {
@@ -39,7 +37,6 @@ func LoadConfig(configPath string) (*DBConfig, error) {
 	return &config, nil
 }
 
-// Connect establishes a connection to the database
 func Connect(config *DBConfig) (*sql.DB, error) {
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?tls=false",
 		config.User, config.Password, config.Host, config.Port, config.DBName)
