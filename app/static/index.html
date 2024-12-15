@@ -11,6 +11,27 @@
         <h1>Welcome at Fonteyn holiday parks House Reservations</h1>
     </header>
     <main>
+        <!-- Overlay for dimming background -->
+        <div id="overlay" class="overlay"></div>
+        
+        <!-- Popup Reservation Form -->
+        <div id="popup" class="popup">
+            <div class="popup-content">
+                <span id="close-popup" class="close-button">&times;</span>
+                <h2>Reservation Form</h2>
+                <form id="reservation-form">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" required>
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                    <label for="date">Date:</label>
+                    <input type="date" id="date" name="date" required>
+                    <button type="submit">Submit</button>
+                </form>
+            </div>
+        </div>
+        
+        <!-- House Grid -->
         <div id="houses" class="house-grid"></div>
     </main>
     <script src="scripts.js"></script>

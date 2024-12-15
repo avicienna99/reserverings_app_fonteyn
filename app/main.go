@@ -8,6 +8,7 @@ import (
 	"reserverings_app_fonteyn/app/db"
 )
 
+// test
 func main() {
 
 	config, err := db.LoadConfig("./config/db_config.json")
