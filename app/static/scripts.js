@@ -11,7 +11,7 @@ async function loadHouses() {
         </div>
     `).join('');
 
-    // Attach click events to house tiles
+    // click events
     document.querySelectorAll('.house-tile').forEach(tile => {
         tile.addEventListener('click', () => {
             openPopup(tile.dataset.id);
@@ -25,39 +25,44 @@ function openPopup(houseId) {
     popup.classList.add('visible');
     overlay.classList.add('visible');
 
-    // Optional: Customize the popup content if needed
+    
     const form = document.getElementById('reservation-form');
-    form.dataset.houseId = houseId; // Store house ID for the reservation
+    form.dataset.houseId = houseId; 
 
-    // Reset form fields
+    
     document.getElementById('name').value = '';
     document.getElementById('email').value = '';
-    document.getElementById('date').value = '';
-}
-
-function closePopup() {
-    const popup = document.getElementById('popup');
-    const overlay = document.getElementById('overlay');
-    popup.classList.remove('visible');
-    overlay.classList.remove('visible');
+    document.getElementById('start-date').value = '';
+    document.getElementById('end-date').value = '';
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     loadHouses();
 
-    // Attach close event listeners
+
     document.getElementById('close-popup').addEventListener('click', closePopup);
+
+ 
     document.getElementById('overlay').addEventListener('click', closePopup);
 
-    // Handle form submission
+
     document.getElementById('reservation-form').addEventListener('submit', (e) => {
         e.preventDefault();
         const houseId = e.target.dataset.houseId;
         const name = document.getElementById('name').value;
         const email = document.getElementById('email').value;
-        const date = document.getElementById('date').value;
+        const startDate = document.getElementById('start-date').value;
+        const endDate = document.getElementById('end-date').value;
 
-        console.log(`Reservation for House ID ${houseId}: Name: ${name}, Email: ${email}, Date: ${date}`);
+        console.log(`Reservation for House ID ${houseId}: Name: ${name}, Email: ${email}, Start Date: ${startDate}, End Date: ${endDate}`);
         closePopup();
     });
 });
+
+function closePopup() {
+    console.log('Closing popup');
+    const popup = document.getElementById('popup');
+    const overlay = document.getElementById('overlay');
+    popup.classList.remove('visible');
+    overlay.classList.remove('visible');
+}
