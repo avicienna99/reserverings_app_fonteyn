@@ -25,6 +25,7 @@ func main() {
 	http.Handle("/", http.FileServer(http.Dir("./app/static")))
 
 	http.HandleFunc("/api/houses", api.GetHousesHandler(dbConn, config.Table))
+	http.HandleFunc("/api/reservations", api.ReservationHandler(dbConn))
 
 	log.Fatal(http.ListenAndServe(":80", nil))
 }

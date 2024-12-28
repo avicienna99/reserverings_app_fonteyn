@@ -11,7 +11,7 @@ async function loadHouses() {
         </div>
     `).join('');
 
-    // click events
+    // Click events
     document.querySelectorAll('.house-tile').forEach(tile => {
         tile.addEventListener('click', () => {
             openPopup(tile.dataset.id);
@@ -25,11 +25,9 @@ function openPopup(houseId) {
     popup.classList.add('visible');
     overlay.classList.add('visible');
 
-    
     const form = document.getElementById('reservation-form');
     form.dataset.houseId = houseId; 
 
-    
     document.getElementById('name').value = '';
     document.getElementById('email').value = '';
     document.getElementById('start-date').value = '';
@@ -39,14 +37,10 @@ function openPopup(houseId) {
 document.addEventListener('DOMContentLoaded', () => {
     loadHouses();
 
-
     document.getElementById('close-popup').addEventListener('click', closePopup);
-
- 
     document.getElementById('overlay').addEventListener('click', closePopup);
 
-
-    document.getElementById('reservation-form').addEventListener('submit', (e) => {
+    document.getElementById('reservation-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         const houseId = e.target.dataset.houseId;
         const name = document.getElementById('name').value;
@@ -54,7 +48,31 @@ document.addEventListener('DOMContentLoaded', () => {
         const startDate = document.getElementById('start-date').value;
         const endDate = document.getElementById('end-date').value;
 
-        console.log(`Reservation for House ID ${houseId}: Name: ${name}, Email: ${email}, Start Date: ${startDate}, End Date: ${endDate}`);
+        const reservation = {
+            house_id: parseInt(houseId),
+            name,
+            email,
+            start_date: startDate,
+            end_date: endDate,
+        };
+
+        try {
+            const response = await fetch('/api/reservations', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(reservation),
+            });
+
+            if (response.ok) {
+                alert('Reservation submitted successfully!');
+            } else {
+                alert('Failed to submit reservation.');
+            }
+        } catch (error) {
+            console.error('Error submitting reservation:', error);
+            alert('An error occurred. Please try again.');
+        }
+
         closePopup();
     });
 });
