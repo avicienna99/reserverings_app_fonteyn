@@ -4,22 +4,11 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"database/sql"
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
-	"path/filepath"
+	"os"
 
 	"github.com/go-sql-driver/mysql"
 )
-
-type DBConfig struct {
-	Host     string `json:"host"`
-	Port     int    `json:"port"`
-	User     string `json:"user"`
-	Password string `json:"password"`
-	DBName   string `json:"dbname"`
-	Table    string `json:"table"`
-}
 
 const rootCert = `
 -----BEGIN CERTIFICATE-----
@@ -46,26 +35,21 @@ CAUw7C29C79Fv1C5qfPrmAESrciIxpg0X40KPMbp1ZWVbd4=
 -----END CERTIFICATE-----
 `
 
-func LoadConfig(configPath string) (*DBConfig, error) {
-	filePath, err := filepath.Abs(configPath)
-	if err != nil {
-		return nil, err
+// Connect establishes a connection to the database using environment variables.
+func Connect() (*sql.DB, error) {
+	// Read configuration from environment variables
+	host := os.Getenv("DB_HOST")
+	port := os.Getenv("DB_PORT")
+	user := os.Getenv("DB_USER")
+	password := os.Getenv("DB_PASSWORD")
+	dbName := os.Getenv("DB_NAME")
+
+	// Validate environment variables
+	if host == "" || port == "" || user == "" || password == "" || dbName == "" {
+		return nil, fmt.Errorf("database configuration missing in environment variables")
 	}
 
-	data, err := ioutil.ReadFile(filePath)
-	if err != nil {
-		return nil, err
-	}
-
-	var config DBConfig
-	if err := json.Unmarshal(data, &config); err != nil {
-		return nil, err
-	}
-	return &config, nil
-}
-
-func Connect(config *DBConfig) (*sql.DB, error) {
-	// new certificate pool and root certificate
+	// New certificate pool and root certificate
 	rootCertPool := x509.NewCertPool()
 	if ok := rootCertPool.AppendCertsFromPEM([]byte(rootCert)); !ok {
 		return nil, fmt.Errorf("failed to append root certificate")
@@ -83,8 +67,8 @@ func Connect(config *DBConfig) (*sql.DB, error) {
 	}
 
 	// Construct the DSN using TLS
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?tls=azuremysql",
-		config.User, config.Password, config.Host, config.Port, config.DBName)
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?tls=azuremysql",
+		user, password, host, port, dbName)
 	fmt.Printf("Attempting to connect to database: %s\n", dsn)
 
 	db, err := sql.Open("mysql", dsn)
