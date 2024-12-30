@@ -67,6 +67,7 @@ jobs:
 
     - name: Test Docker container
       run: |
+<<<<<<< HEAD
         docker run --rm \
           -e DB_HOST="${{ secrets.DB_HOST }}" \
           -e DB_PORT="${{ secrets.DB_PORT }}" \
@@ -75,6 +76,9 @@ jobs:
           -e DB_NAME="${{ secrets.DB_NAME }}" \
           -e DB_TABLE="${{ secrets.DB_TABLE }}" \
           ${{ secrets.ACR_LOGIN_SERVER }}/reserverings-app:latest ./main --help || exit 1
+=======
+        docker run --rm ${{ secrets.ACR_LOGIN_SERVER }}/reserverings-app:latest ./main --help || exit 1
+>>>>>>> 948cf9a5949d6b2d0a96492c3f45469e36cd8705
 
     - name: Push Docker image to ACR
       run: |
