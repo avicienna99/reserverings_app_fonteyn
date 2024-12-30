@@ -65,6 +65,10 @@ jobs:
       run: |
         docker build -t ${{ secrets.ACR_LOGIN_SERVER }}/reserverings-app:latest .
 
+    - name: Test Docker container
+      run: |
+        docker run --rm ${{ secrets.ACR_LOGIN_SERVER }}/reserverings-app:latest ./main --help || exit 1
+
     - name: Push Docker image to ACR
       run: |
         docker push ${{ secrets.ACR_LOGIN_SERVER }}/reserverings-app:latest
