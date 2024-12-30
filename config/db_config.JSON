@@ -1,8 +1,0 @@
-{
-    "host": "db01resapptest.mysql.database.azure.com",
-    "port": 3306,
-    "user": "nkouba",
-    "password": "Laithislockedin!",
-    "dbname": "reserveringsdb",
-    "table": "houses"
-}
